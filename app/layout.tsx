@@ -5,6 +5,8 @@ import { SiteProvider } from "@/components/SiteProvider";
 import { CommerceEngine } from "@/components/CommerceEngine";
 import { AuthProvider } from "@/components/AuthProvider"; // <-- Added AuthProvider import
 import Navbar from "@/components/Navbar";
+import Footer from "@/components/Footer";
+import CookieNotice from "@/components/CookieNotice";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -31,6 +33,8 @@ export default function RootLayout({
               <main className="flex-1 flex flex-col w-full">
                 {children}
               </main>
+              <Footer />
+              <CookieNotice />
             </CommerceEngine>
           </SiteProvider>
         </AuthProvider>

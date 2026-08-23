@@ -7,6 +7,10 @@ import { prisma } from "@/lib/prisma";
 import bcrypt from "bcryptjs";
 
 export const authOptions: NextAuthOptions = {
+  // TEMP: prints the real cause behind OAuthSignin/OAuthCallback errors to
+  // your terminal (the URL only ever shows a generic error code). Turn
+  // this back off (delete the line) once Google login is working.
+  debug: true,
   adapter: PrismaAdapter(prisma) as any,
   session: {
     strategy: "jwt",

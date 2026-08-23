@@ -43,7 +43,7 @@ export default function AdminPage() {
   if (!session || (session.user as any).role !== "admin") return null;
 
   return (
-    <div className="p-6 md:p-12 max-w-7xl mx-auto min-h-screen">
+    <div className="p-6 md:p-12 max-w-7xl mx-auto min-h-screen bg-white text-black">
       <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-8 border-b-[6px] border-black pb-4 gap-4">
         <h1 className="text-4xl md:text-6xl font-black uppercase tracking-tight">👑 Kitchen Portal</h1>
         <Link href="/" className="bg-white border-[4px] border-black px-6 py-3 font-black uppercase tracking-widest hover:bg-black hover:text-white transition-colors shadow-[6px_6px_0_0_rgba(0,0,0,1)]">

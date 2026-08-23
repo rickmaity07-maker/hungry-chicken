@@ -1,12 +1,14 @@
 "use client";
 
 import Link from 'next/link';
+import { useSession } from 'next-auth/react';
 import { useSite } from './SiteProvider';
 import { useCommerce } from './CommerceEngine';
 
 export default function Navbar() {
   const { siteData, content, toggleSite, toggleLanguage, activeSite, language } = useSite();
   const { setIsProfileOpen } = useCommerce();
+  const { data: session, status } = useSession();
 
   return (
     <nav className="w-full bg-white text-black border-b-[3px] border-black px-4 md:px-6 py-4 flex flex-col xl:flex-row justify-between items-center sticky top-0 z-50">
@@ -43,9 +45,14 @@ export default function Navbar() {
 
         <button
           onClick={() => setIsProfileOpen(true)}
-          className={`border-[3px] border-black px-4 md:px-6 py-2 font-black uppercase text-[10px] md:text-sm shadow-[4px_4px_0_0_rgba(0,0,0,1)] hover:translate-y-1 hover:translate-x-1 hover:shadow-none active:scale-95 transition-all ${siteData.colors.accent} ${siteData.colors.accentText}`}
+          className={`relative border-[3px] border-black px-4 md:px-6 py-2 font-black uppercase text-[10px] md:text-sm shadow-[4px_4px_0_0_rgba(0,0,0,1)] hover:translate-y-1 hover:translate-x-1 hover:shadow-none active:scale-95 transition-all ${siteData.colors.accent} ${siteData.colors.accentText}`}
         >
-          {language === 'de' ? 'Konto' : 'Account'}
+          {status === "authenticated" && (
+            <span className="absolute -top-1.5 -right-1.5 w-3 h-3 bg-green-500 border-2 border-black rounded-full"></span>
+          )}
+          {status === "authenticated"
+            ? session?.user?.name?.split(" ")[0] || (language === 'de' ? 'Konto' : 'Account')
+            : language === 'de' ? 'Anmelden' : 'Log In'}
         </button>
       </div>
     </nav>

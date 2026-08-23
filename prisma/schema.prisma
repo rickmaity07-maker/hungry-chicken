@@ -144,7 +144,11 @@ model Order {
   createdAt     DateTime    @default(now())
   updatedAt     DateTime    @updatedAt
 
-  user          User        @relation(fields: [userId], references: [id])
+  // Deliberately NOT cascading: German tax law (§147 AO / §257 HGB) requires
+  // order/invoice records to be kept ~10 years even after a customer deletes
+  // their account. Account deletion anonymizes the customer fields on these
+  // rows instead of deleting them — see /api/account/delete.
+  user          User        @relation(fields: [userId], references: [id], onDelete: Restrict)
   items         OrderItem[]
 }
 
