@@ -110,9 +110,9 @@ export function CommerceEngine({ children }: { children: React.ReactNode }) {
   const updateInstructions = (id: string, text: string) =>
     setCart((prev) => prev.map((item) => (item.id === id ? { ...item, instructions: text } : item)));
 
-  const subtotal = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
-  const tax = subtotal * 0.08;
-  const finalTotal = subtotal + tax;
+  // Menu prices are gross (VAT included), as German price law requires for
+  // consumers — so the total is simply the sum, with nothing added on top.
+  const finalTotal = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
 
   // ---------------- Wishlist ----------------
   const [wishlist, setWishlist] = useState<WishlistItem[]>([]);
@@ -377,7 +377,7 @@ export function CommerceEngine({ children }: { children: React.ReactNode }) {
                   setIsCartOpen(false);
                   setCheckoutStep("cart");
                 }}
-                className="text-white text-3xl font-bold drop-shadow-[2px_2px_0_rgba(0,0,0,1)]"
+                aria-label="Schließen" className="text-white text-3xl font-bold drop-shadow-[2px_2px_0_rgba(0,0,0,1)] hover:rotate-90 transition-transform"
               >
                 ×
               </button>
@@ -437,18 +437,11 @@ export function CommerceEngine({ children }: { children: React.ReactNode }) {
                 </div>
 
                 <div className="p-6 border-t-[4px] border-black bg-white">
-                  <div className="flex justify-between items-center mb-1 font-mono font-bold text-sm text-gray-500 uppercase">
-                    <span>Subtotal:</span>
-                    <span>€{subtotal.toFixed(2)}</span>
-                  </div>
-                  <div className="flex justify-between items-center mb-4 font-mono font-bold text-sm text-gray-500 uppercase">
-                    <span>Tax (8%):</span>
-                    <span>€{tax.toFixed(2)}</span>
-                  </div>
-                  <div className="flex justify-between items-center mb-4 font-black uppercase text-2xl border-t-2 border-dashed border-gray-300 pt-2">
+                  <div className="flex justify-between items-center font-black uppercase text-2xl">
                     <span>Total:</span>
-                    <span>€{finalTotal.toFixed(2)}</span>
+                    <span className="tabular-nums">€{finalTotal.toFixed(2)}</span>
                   </div>
+                  <p className="mb-4 text-right font-mono text-xs text-gray-500">inkl. MwSt.</p>
                   <button
                     disabled={cart.length === 0 || status === "loading"}
                     onClick={() => {

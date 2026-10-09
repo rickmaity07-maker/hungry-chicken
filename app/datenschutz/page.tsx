@@ -121,6 +121,12 @@ export default function DatenschutzPage() {
                 Cookie handelt, ist gemäß § 25 Abs. 2 Nr. 2 TTDSG keine gesonderte Einwilligung erforderlich.
                 Wir setzen aktuell keine Analyse-, Marketing- oder Tracking-Cookies ein.
               </p>
+              <p>
+                Zusätzlich speichert Ihr Browser im lokalen Speicher (localStorage) Ihren Warenkorb, die gewählte
+                Sprache und den gewählten Bereich (Grill/Sweets) sowie, ob Sie den Cookie-Hinweis geschlossen haben.
+                Diese Daten verlassen Ihr Gerät nicht, dienen ausschließlich dem von Ihnen gewünschten Dienst
+                (§ 25 Abs. 2 Nr. 2 TTDSG) und lassen sich jederzeit über die Browsereinstellungen löschen.
+              </p>
             </Section>
 
             <Section title="8. Empfänger und Auftragsverarbeiter">
@@ -286,6 +292,12 @@ export default function DatenschutzPage() {
                 necessary for operating the site, no separate consent is required under § 25(2) No. 2 TTDSG (the
                 German law implementing the ePrivacy Directive). We currently use no analytics, marketing, or
                 tracking cookies.
+              </p>
+              <p>
+                In addition, your browser&apos;s local storage keeps your cart, your chosen language and section
+                (Grill/Sweets), and whether you dismissed the cookie notice. This data never leaves your device, is
+                used solely to provide the service you requested (§ 25(2) No. 2 TTDSG), and can be cleared at any
+                time in your browser settings.
               </p>
             </Section>
 

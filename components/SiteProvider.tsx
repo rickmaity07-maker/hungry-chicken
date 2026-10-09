@@ -1,6 +1,6 @@
 "use client";
 
-import React, { createContext, useContext, useState, ReactNode } from 'react';
+import React, { createContext, useContext, useEffect, useState, ReactNode } from 'react';
 import { siteConfig, SiteId, LanguageId } from '@/lib/siteConfig';
 
 interface SiteContextType {
@@ -17,6 +17,31 @@ const SiteContext = createContext<SiteContextType | undefined>(undefined);
 export const SiteProvider = ({ children }: { children: ReactNode }) => {
   const [activeSite, setActiveSite] = useState<SiteId>('grill');
   const [language, setLanguage] = useState<LanguageId>('de');
+  const [restored, setRestored] = useState(false);
+
+  // Remember the visitor's section + language across reloads. This is
+  // functional localStorage (no tracking), so it needs no consent.
+  useEffect(() => {
+    try {
+      const site = localStorage.getItem('hc-site');
+      const lang = localStorage.getItem('hc-lang');
+      if (site === 'grill' || site === 'sweets') setActiveSite(site);
+      if (lang === 'de' || lang === 'en') setLanguage(lang);
+    } catch {}
+    setRestored(true);
+  }, []);
+
+  useEffect(() => {
+    if (!restored) return;
+    try {
+      localStorage.setItem('hc-site', activeSite);
+      localStorage.setItem('hc-lang', language);
+    } catch {}
+  }, [activeSite, language, restored]);
+
+  useEffect(() => {
+    document.documentElement.lang = language;
+  }, [language]);
 
   const toggleSite = () => {
     setActiveSite((prev: SiteId) => (prev === 'grill' ? 'sweets' : 'grill'));

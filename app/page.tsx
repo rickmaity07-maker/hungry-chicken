@@ -7,10 +7,11 @@ import Link from "next/link";
 // SWEETS BRAND HOME
 // ==========================================
 function SweetsHome({ data, content, language }: { data: any, content: any, language: string }) {
+  const alts = ["Frischer Saft", "Orangensaft mit Zitronenscheibe", "Saftflasche mit Zitrusfrüchten"];
   const images = [
-    "https://images.unsplash.com/photo-1600271886742-f049cd451bba?q=80&w=800&auto=format&fit=crop",
-    "https://images.unsplash.com/photo-1546173159-315724a31696?q=80&w=800&auto=format&fit=crop",
-    "https://images.unsplash.com/photo-1621506289937-a8e4df240d0b?q=80&w=800&auto=format&fit=crop"
+    "/sweets-2.jpg",
+    "/gallery-5.jpg",
+    "/sweets-3.jpg"
   ];
 
   return (
@@ -48,8 +49,7 @@ function SweetsHome({ data, content, language }: { data: any, content: any, lang
         </div>
 
         <h1 
-          className="text-[12vw] sm:text-[10vw] md:text-[8vw] lg:text-[110px] font-black uppercase tracking-tighter leading-[0.85] text-white w-full text-center scale-y-110 mb-4 md:mb-8 z-10 drop-shadow-[6px_6px_0_rgba(0,0,0,1)] md:drop-shadow-[8px_8px_0_rgba(0,0,0,1)] px-2"
-          style={{ fontFamily: "'Baloo 2', sans-serif", fontWeight: 800 }}
+          className="text-[12vw] sm:text-[10vw] md:text-[8vw] lg:text-[110px] font-display font-extrabold uppercase tracking-tighter leading-[0.85] text-white w-full text-center scale-y-110 mb-4 md:mb-8 z-10 drop-shadow-[6px_6px_0_rgba(0,0,0,1)] md:drop-shadow-[8px_8px_0_rgba(0,0,0,1)] px-2"
         >
           {content.hero}
         </h1>
@@ -57,12 +57,12 @@ function SweetsHome({ data, content, language }: { data: any, content: any, lang
         {/* DESKTOP POLAROIDS (Hidden on mobile) */}
         <div className="relative w-full max-w-4xl h-[340px] hidden md:flex justify-center items-center z-20">
           <div className="absolute left-12 transform -rotate-6 border-[6px] border-white bg-white shadow-[8px_8px_0_0_rgba(0,0,0,1)] h-64 w-48">
-            <img src={images[0]} className="w-full h-full object-cover border-[3px] border-black"/>
+            <img src={images[0]} alt={alts[0]} className="w-full h-full object-cover border-[3px] border-black"/>
           </div>
 
           <Link href="/menu" className="relative z-30 transform scale-105 hover:-translate-y-4 hover:rotate-2 transition-all duration-500 border-[6px] border-white bg-white shadow-[12px_12px_0_0_rgba(0,0,0,1)] h-80 w-60 flex flex-col group cursor-pointer block">
             <div className="flex-1 border-[3px] border-black overflow-hidden relative">
-              <img src={images[1]} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"/>
+              <img src={images[1]} alt={alts[1]} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"/>
               {/* Quirks: Hover Drip Reveal */}
               <svg className="absolute -bottom-1 left-0 w-full h-6 opacity-0 group-hover:opacity-100 transition-opacity duration-300" viewBox="0 0 200 24" preserveAspectRatio="none">
                 <path d="M0,0 Q10,20 20,0 T40,0 T60,0 T80,0 T100,0 T120,0 T140,0 T160,0 T180,0 T200,0 V0 H0 Z" fill="#FF2A75"/>
@@ -74,7 +74,7 @@ function SweetsHome({ data, content, language }: { data: any, content: any, lang
           </Link>
 
           <div className="absolute right-12 transform rotate-6 border-[6px] border-white bg-white shadow-[8px_8px_0_0_rgba(0,0,0,1)] h-64 w-48">
-            <img src={images[2]} className="w-full h-full object-cover border-[3px] border-black"/>
+            <img src={images[2]} alt={alts[2]} className="w-full h-full object-cover border-[3px] border-black"/>
           </div>
         </div>
 
@@ -83,7 +83,7 @@ function SweetsHome({ data, content, language }: { data: any, content: any, lang
           {images.map((img, i) => (
             <Link href="/menu" key={i} className={`shrink-0 w-52 h-72 snap-center transform transition-all duration-300 border-[4px] border-white bg-white shadow-[6px_6px_0_0_rgba(0,0,0,1)] flex flex-col group ${i === 1 ? 'scale-105 rotate-1 z-10' : (i === 0 ? '-rotate-2' : 'rotate-2')}`}>
               <div className="flex-1 border-[2px] border-black overflow-hidden relative">
-                <img src={img} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"/>
+                <img src={img} alt={alts[i]} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"/>
                 <svg className="absolute -bottom-1 left-0 w-full h-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300" viewBox="0 0 200 24" preserveAspectRatio="none">
                   <path d="M0,0 Q10,20 20,0 T40,0 T60,0 T80,0 T100,0 T120,0 T140,0 T160,0 T180,0 T200,0 V0 H0 Z" fill="#FF2A75"/>
                 </svg>
@@ -130,9 +130,8 @@ function SweetsHome({ data, content, language }: { data: any, content: any, lang
           <span className="text-[6rem] md:text-[12rem] leading-none absolute -top-12 -left-4 md:-top-32 md:-left-16 opacity-20 text-black">"</span>
           
           <h2 
-            className="text-3xl md:text-5xl lg:text-6xl font-black uppercase tracking-tighter leading-[0.9] text-black mb-6 md:mb-8 relative z-10 bg-white inline-block px-3 md:px-4 border-[2px] md:border-[3px] border-black shadow-[6px_6px_0_0_rgba(180,255,0,1)] md:shadow-[8px_8px_0_0_rgba(180,255,0,1)]"
-            style={{ fontFamily: "'Baloo 2', sans-serif", fontWeight: 800 }}
-          >
+            className="text-3xl md:text-5xl lg:text-6xl font-display font-extrabold uppercase tracking-tighter leading-[0.9] text-black mb-6 md:mb-8 relative z-10 bg-white inline-block px-3 md:px-4 border-[2px] md:border-[3px] border-black shadow-[6px_6px_0_0_rgba(180,255,0,1)] md:shadow-[8px_8px_0_0_rgba(180,255,0,1)]"
+            >
             {content.quote}
           </h2>
           
@@ -153,11 +152,11 @@ function SweetsHome({ data, content, language }: { data: any, content: any, lang
 // GRILL BRAND HOME
 // ==========================================
 function GrillHome({ data, content, language }: { data: any, content: any, language: string }) {
-  // NEW: Updated to high-quality Fried Chicken / Grill photos
+  const alts = ["Hungry Chicken Grill", "Fried Chicken", "Unser Restaurant"];
   const images = [
-    "https://images.unsplash.com/photo-1626082927389-6cd097cdc6ec?q=80&w=800&auto=format&fit=crop",
-    "https://images.unsplash.com/photo-1569691899455-88464f6d3ab1?q=80&w=800&auto=format&fit=crop",
-    "https://images.unsplash.com/photo-1598514982205-f36b96d1e8d4?q=80&w=800&auto=format&fit=crop"
+    "/grill-3.jpg",
+    "/grill-1.jpg",
+    "/gallery-1.jpg"
   ];
 
   return (
@@ -170,7 +169,7 @@ function GrillHome({ data, content, language }: { data: any, content: any, langu
         <div className="absolute inset-0 bg-[radial-gradient(#000_2px,transparent_0)] bg-[length:20px_20px] md:bg-[length:30px_30px] opacity-20 z-0 pointer-events-none"></div>
 
         {/* Quirks: Welcome Badge */}
-        <div className="absolute top-4 left-4 md:top-8 md:left-8 bg-blue-600 text-white font-bold px-4 md:px-6 py-1.5 md:py-2 border-[2px] md:border-[3px] border-black shadow-[4px_4px_0_0_rgba(0,0,0,1)] z-30 transform -rotate-3 text-xs md:text-base hidden sm:block">
+        <div className="absolute top-4 left-4 md:top-8 md:left-8 bg-black text-white font-black uppercase px-4 md:px-6 py-1.5 md:py-2 border-[2px] md:border-[3px] border-black shadow-[4px_4px_0_0_rgba(255,90,31,1)] z-30 transform -rotate-3 text-xs md:text-base hidden sm:block">
           {content.nav.home}
         </div>
 
@@ -187,12 +186,12 @@ function GrillHome({ data, content, language }: { data: any, content: any, langu
           </svg>
 
           <div className="absolute left-12 transform -rotate-6 border-[6px] border-white bg-white shadow-[8px_8px_0_0_rgba(0,0,0,1)] h-64 w-48">
-            <img src={images[0]} className="w-full h-full object-cover border-[3px] border-black"/>
+            <img src={images[0]} alt={alts[0]} className="w-full h-full object-cover border-[3px] border-black"/>
           </div>
 
           <Link href="/menu" className="relative z-30 transform scale-105 hover:-translate-y-4 transition-all duration-500 border-[6px] border-white bg-white shadow-[12px_12px_0_0_rgba(0,0,0,1)] h-80 w-60 flex flex-col group cursor-pointer block">
             <div className="flex-1 border-[3px] border-black overflow-hidden relative">
-              <img src={images[1]} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"/>
+              <img src={images[1]} alt={alts[1]} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"/>
             </div>
             <div className={`w-full py-2 mt-1.5 border-[3px] border-black text-center font-black uppercase text-lg hover:bg-black hover:text-white transition-colors ${data.colors.accent} ${data.colors.accentText}`}>
               {content.action}
@@ -200,7 +199,7 @@ function GrillHome({ data, content, language }: { data: any, content: any, langu
           </Link>
 
           <div className="absolute right-12 transform rotate-6 border-[6px] border-white bg-white shadow-[8px_8px_0_0_rgba(0,0,0,1)] h-64 w-48">
-            <img src={images[2]} className="w-full h-full object-cover border-[3px] border-black"/>
+            <img src={images[2]} alt={alts[2]} className="w-full h-full object-cover border-[3px] border-black"/>
           </div>
 
           {/* Quirks: Spring Scribbles */}
@@ -214,7 +213,7 @@ function GrillHome({ data, content, language }: { data: any, content: any, langu
           {images.map((img, i) => (
             <Link href="/menu" key={i} className={`shrink-0 w-52 h-72 snap-center transform transition-all duration-300 border-[4px] border-white bg-white shadow-[6px_6px_0_0_rgba(0,0,0,1)] flex flex-col group ${i === 1 ? 'scale-105 rotate-1 z-10' : (i === 0 ? '-rotate-2' : 'rotate-2')}`}>
               <div className="flex-1 border-[2px] border-black overflow-hidden relative">
-                <img src={img} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"/>
+                <img src={img} alt={alts[i]} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"/>
               </div>
               <div className={`w-full py-1.5 mt-1 border-[2px] border-black text-center font-black uppercase text-sm hover:bg-black hover:text-white transition-colors ${data.colors.accent} ${data.colors.accentText}`}>
                 {content.action}
@@ -277,42 +276,6 @@ export default function Home() {
 
   return (
     <>
-      <style dangerouslySetInnerHTML={{__html: `
-        @import url('https://fonts.googleapis.com/css2?family=Baloo+2:wght@700;800&display=swap');
-
-        @keyframes marquee {
-          0% { transform: translateX(0%); }
-          100% { transform: translateX(-100%); }
-        }
-        .animate-marquee {
-          animation: marquee 20s linear infinite;
-        }
-
-        @keyframes wiggle {
-          0%, 100% { transform: rotate(3deg); }
-          50% { transform: rotate(-3deg); }
-        }
-        .animate-wiggle {
-          animation: wiggle 2.5s ease-in-out infinite;
-        }
-
-        @keyframes float {
-          0%, 100% { transform: translateY(0px) rotate(0deg); }
-          50% { transform: translateY(-14px) rotate(8deg); }
-        }
-        .animate-float {
-          animation: float 4s ease-in-out infinite;
-        }
-
-        /* Hides scrollbar for the mobile photo slider */
-        .no-scrollbar::-webkit-scrollbar {
-          display: none;
-        }
-        .no-scrollbar {
-          -ms-overflow-style: none;
-          scrollbar-width: none;
-        }
-      `}} />
       
       {activeSite === 'sweets' ? <SweetsHome data={siteData} content={content} language={language} /> : <GrillHome data={siteData} content={content} language={language} />}
     </>

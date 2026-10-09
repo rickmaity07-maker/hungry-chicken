@@ -1,3 +1,161 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer base {
+  h1,
+  h2,
+  h3 {
+    text-wrap: balance;
+  }
+
+  p {
+    text-wrap: pretty;
+  }
+
+  /* Archivo's space glyph is narrow; heavy tight-tracked caps need more room. */
+  .tracking-tighter,
+  .tracking-tight {
+    word-spacing: 0.14em;
+  }
+
+  ::selection {
+    background: #000;
+    color: #fff;
+  }
+
+  /* Hard, on-brand focus ring for keyboard users only. */
+  :focus-visible {
+    outline: 3px solid #000;
+    outline-offset: 3px;
+    box-shadow: 0 0 0 6px #fff;
+  }
+
+  /* Physical "press" on every button and link-button. */
+  button:not(:disabled):active,
+  a[class*="border-"]:active {
+    transform: translate(2px, 2px) scale(0.98);
+    box-shadow: none;
+  }
+}
+
+@layer utilities {
+  .tabular-nums {
+    font-variant-numeric: tabular-nums;
+  }
+}
+
+/* ---------- Accessibility ---------- */
+.skip-link {
+  position: fixed;
+  top: 0.75rem;
+  left: 0.75rem;
+  z-index: 100;
+  padding: 0.75rem 1.25rem;
+  background: #000;
+  color: #fff;
+  font-weight: 900;
+  text-transform: uppercase;
+  border: 3px solid #000;
+  box-shadow: 4px 4px 0 0 #fff;
+  transform: translateY(-200%);
+  transition: transform 150ms ease-out;
+}
+.skip-link:focus {
+  transform: translateY(0);
+}
+
+/* ---------- Surface: subtle print grain over everything ---------- */
+.grain {
+  position: fixed;
+  inset: 0;
+  z-index: 70;
+  pointer-events: none;
+  opacity: 0.07;
+  mix-blend-mode: multiply;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* ---------- Home page motion (moved out of an inline <style> tag) ---------- */
+@keyframes marquee {
+  from { transform: translateX(0%); }
+  to { transform: translateX(-100%); }
+}
+.animate-marquee {
+  animation: marquee 20s linear infinite;
+}
+.marquee-container:hover .animate-marquee {
+  animation-play-state: paused;
+}
+
+@keyframes wiggle {
+  0%, 100% { transform: rotate(3deg); }
+  50% { transform: rotate(-3deg); }
+}
+.animate-wiggle {
+  animation: wiggle 2.5s ease-in-out infinite;
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0px) rotate(0deg); }
+  50% { transform: translateY(-14px) rotate(8deg); }
+}
+.animate-float {
+  animation: float 4s ease-in-out infinite;
+}
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+/* ---------- Drawer / modal entry (classes were used but never defined) ---------- */
+@keyframes slide-in-right {
+  from { transform: translateX(100%); }
+  to { transform: translateX(0); }
+}
+@keyframes pop-in {
+  from { opacity: 0; transform: scale(0.95) translateY(8px); }
+  to { opacity: 1; transform: scale(1) translateY(0); }
+}
+.animate-in.slide-in-from-right {
+  animation: slide-in-right 320ms cubic-bezier(0.22, 1.2, 0.36, 1) both;
+}
+.animate-in.zoom-in-95 {
+  animation: pop-in 260ms cubic-bezier(0.22, 1.4, 0.36, 1) both;
+}
+
+/* ---------- Staggered card entry (menu, gallery) ---------- */
+@keyframes rise-in {
+  from { opacity: 0; translate: 0 24px; }
+  to { opacity: 1; translate: 0 0; }
+}
+.rise-in {
+  animation: rise-in 520ms cubic-bezier(0.22, 1.2, 0.36, 1) both;
+  animation-delay: calc(var(--i, 0) * 70ms);
+}
+
+/* ---------- Skeleton loader ---------- */
+@keyframes shimmer {
+  from { background-position: 200% 0; }
+  to { background-position: -200% 0; }
+}
+.skeleton {
+  background: linear-gradient(90deg, #e5e5e5 25%, #f5f5f5 50%, #e5e5e5 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.4s linear infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

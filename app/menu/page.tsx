@@ -1,5 +1,6 @@
 "use client";
 
+import type React from "react";
 import { useEffect, useState } from "react";
 import { useSite } from "@/components/SiteProvider";
 import { useCommerce } from "@/components/CommerceEngine";
@@ -14,25 +15,55 @@ type MenuItem = {
   image: string;
 };
 
+const t = {
+  de: {
+    grill: "DIE GRILL-KARTE",
+    sweets: "DIE SWEETS-KARTE",
+    loading: "Speisekarte wird geladen...",
+    empty: "Hier gibt es noch nichts — die Karte für diesen Bereich wird gerade vorbereitet.",
+    error: "Die Speisekarte konnte nicht geladen werden. Bitte versuche es gleich noch einmal.",
+    add: "In den Warenkorb",
+  },
+  en: {
+    grill: "THE GRILL MENU",
+    sweets: "THE SWEETS MENU",
+    loading: "Loading menu...",
+    empty: "Nothing here yet — this section's menu is being prepared.",
+    error: "The menu couldn't be loaded. Please try again in a moment.",
+    add: "Add to Cart",
+  },
+};
+
 export default function MenuPage() {
-  const { activeSite, siteData } = useSite();
+  const { activeSite, siteData, language } = useSite();
+  const text = t[language];
   const { addToCart, toggleWishlist, isWishlisted } = useCommerce();
   const [items, setItems] = useState<MenuItem[]>([]);
   const [loading, setLoading] = useState(true);
+  const [failed, setFailed] = useState(false);
 
   const isGrill = activeSite === "grill";
-  const pageTitle = isGrill ? "THE GRILL MENU" : "THE SWEETS MENU";
+  const pageTitle = isGrill ? text.grill : text.sweets;
   const fallbackImage = isGrill ? "/grill-1.jpg" : "/sweets-2.jpg";
 
   useEffect(() => {
     let cancelled = false;
     setLoading(true);
+    setFailed(false);
     fetch(`/api/menu?section=${activeSite}`)
-      .then((res) => (res.ok ? res.json() : []))
+      .then((res) => {
+        if (!res.ok) throw new Error(String(res.status));
+        return res.json();
+      })
       .then((data) => {
         if (!cancelled) setItems(data);
       })
-      .catch(() => {})
+      .catch(() => {
+        if (!cancelled) {
+          setItems([]);
+          setFailed(true);
+        }
+      })
       .finally(() => !cancelled && setLoading(false));
     return () => {
       cancelled = true;
@@ -44,18 +75,33 @@ export default function MenuPage() {
 
   return (
     <div className={`min-h-[calc(100vh-73px)] ${siteData.colors.bg} relative p-4 md:p-16 overflow-hidden`}>
-      <div className={`absolute inset-0 bg-[radial-gradient(${isGrill ? "#FF5A1F" : "#000"}_2px,transparent_0)] bg-[length:20px_20px] md:bg-[length:30px_30px] opacity-20 z-0 pointer-events-none`}></div>
+      <div
+        className="absolute inset-0 bg-[length:20px_20px] md:bg-[length:30px_30px] opacity-20 z-0 pointer-events-none"
+        style={{ backgroundImage: `radial-gradient(${isGrill ? "#FF5A1F" : "#000"} 2px, transparent 0)` }}
+      ></div>
 
       <div className="relative z-20 max-w-6xl mx-auto pt-4 md:pt-8 text-center md:text-left">
         <h1 className="text-5xl md:text-8xl font-black uppercase tracking-tighter mb-10 md:mb-16 text-white drop-shadow-[4px_4px_0_rgba(0,0,0,1)] md:drop-shadow-[8px_8px_0_rgba(0,0,0,1)]">
           {pageTitle}
         </h1>
 
-        {loading && <p className="text-white font-black uppercase text-xl">Loading menu...</p>}
+        {loading && (
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 md:gap-10" role="status" aria-label={text.loading}>
+            {[0, 1, 2].map((i) => (
+              <div key={i} className="bg-white border-[4px] border-black p-4 shadow-[8px_8px_0_0_rgba(0,0,0,1)]">
+                <div className="skeleton w-full aspect-square border-[3px] border-black mb-4" />
+                <div className="skeleton h-7 w-3/4 mb-3" />
+                <div className="skeleton h-4 w-full mb-2" />
+                <div className="skeleton h-4 w-2/3 mb-6" />
+                <div className="skeleton h-12 w-full border-[3px] border-black" />
+              </div>
+            ))}
+          </div>
+        )}
 
         {!loading && items.length === 0 && (
           <p className="text-white font-black uppercase text-xl bg-black/20 border-[3px] border-white p-6 inline-block">
-            No items yet — the owner hasn't added this section's menu in the Kitchen Portal.
+            {failed ? text.error : text.empty}
           </p>
         )}
 
@@ -70,7 +116,8 @@ export default function MenuPage() {
                 .map((item, idx) => (
                   <div
                     key={item.id}
-                    className={`relative bg-white border-[4px] border-black p-4 shadow-[8px_8px_0_0_rgba(0,0,0,1)] hover:-translate-y-2 md:hover:-translate-y-4 hover:shadow-[12px_12px_0_0_rgba(0,0,0,1)] transition-all duration-300 flex flex-col ${
+                    style={{ "--i": idx } as React.CSSProperties}
+                    className={`rise-in relative bg-white text-black border-[4px] border-black p-4 shadow-[8px_8px_0_0_rgba(0,0,0,1)] hover:-translate-y-2 md:hover:-translate-y-4 hover:shadow-[12px_12px_0_0_rgba(0,0,0,1)] transition-all duration-300 flex flex-col ${
                       idx % 2 === 0 ? "transform rotate-1" : "transform -rotate-1"
                     }`}
                   >
@@ -85,15 +132,15 @@ export default function MenuPage() {
                           brand: activeSite,
                         })
                       }
-                      className="absolute top-2 left-2 z-10 w-9 h-9 bg-white border-2 border-black rounded-full flex items-center justify-center text-lg"
-                      aria-label="Toggle wishlist"
+                      className="absolute top-2 left-2 z-10 w-9 h-9 bg-white border-2 border-black rounded-full flex items-center justify-center text-lg shadow-[2px_2px_0_0_rgba(0,0,0,1)] hover:scale-110 transition-transform"
+                      aria-label={isWishlisted(item.id) ? `${item.name} von der Wunschliste entfernen` : `${item.name} auf die Wunschliste`}
                     >
                       {isWishlisted(item.id) ? "❤️" : "🤍"}
                     </button>
 
                     <div className="w-full aspect-square border-[3px] border-black overflow-hidden relative mb-4">
                       <img src={item.image || fallbackImage} alt={item.name} className="w-full h-full object-cover hover:scale-110 transition-transform duration-700" />
-                      <div className="absolute top-2 right-2 bg-black text-white px-3 py-1 font-black text-lg border-2 border-white">
+                      <div className="absolute top-2 right-2 bg-black text-white px-3 py-1 font-mono font-bold text-lg tabular-nums border-2 border-white">
                         €{item.price.toFixed(2)}
                       </div>
                     </div>
@@ -116,7 +163,7 @@ export default function MenuPage() {
                         }
                         className={`w-full py-3 border-[3px] border-black font-black uppercase text-lg hover:bg-black hover:text-white transition-colors ${siteData.colors.accent} ${siteData.colors.accentText}`}
                       >
-                        Eat Now
+                        {text.add}
                       </button>
                     </div>
                   </div>

@@ -117,3 +117,16 @@ export const siteConfig = {
     }
   }
 };
+// Shared business details, used by the Contact page. Keep these in sync with
+// the Impressum (app/impressum/page.tsx) before going live.
+export const business = {
+  street: 'Münchner Straße 45',
+  city: '80331 München',
+  hours: {
+    grill: { de: 'Täglich 11:00 – spät', en: 'Daily 11:00 – late' },
+    sweets: { de: 'Mo – So 10:00 – 20:00', en: 'Mon – Sun 10:00 – 20:00' },
+  },
+  // Plain link (no embedded iframe) so Google only receives data when a
+  // visitor actively clicks it — avoids an undisclosed third-party transfer.
+  mapsUrl: 'https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent('Münchner Straße 45, 80331 München'),
+};

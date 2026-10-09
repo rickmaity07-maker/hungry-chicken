@@ -4,8 +4,6 @@ import { authOptions } from "../auth/[...nextauth]/route";
 import { prisma } from "@/lib/prisma";
 import { notifyAdminNewOrder } from "@/lib/notify";
 
-const TAX_RATE = 0.08;
-
 // POST /api/orders — place a cash order. Requires a fully verified login
 // (email OTP + phone OTP + clicked confirmation link).
 export async function POST(req: Request) {
@@ -54,9 +52,12 @@ export async function POST(req: Request) {
       };
     });
 
+    // Menu prices are gross (VAT included), so nothing is added on top.
+    // `tax` stays 0: the VAT split (7% food / 19% drinks) belongs in the
+    // cash register / accounting, not in a surcharge on the customer.
     const subtotal = orderItemsData.reduce((sum, i) => sum + i.price * i.quantity, 0);
-    const tax = subtotal * TAX_RATE;
-    const totalAmount = subtotal + tax;
+    const tax = 0;
+    const totalAmount = subtotal;
 
     const order = await (prisma as any).order.create({
       data: {

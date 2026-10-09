@@ -175,3 +175,25 @@ panel itself), the server now logs a clear warning in the console if
    email; without it you'll see a console warning per order.
 5. **Run the DB migration** below so the new tables/columns exist.
 6. **Run `npm run seed`** once to create your admin login and starter menu.
+
+## 11. Finishing pass
+- **Build fixed for TypeScript 7** — `tsconfig.json` no longer uses the
+  removed `baseUrl` / bad `@prisma/client` path alias. Type-checking is
+  clean, so the `ignoreBuildErrors` bypass in `next.config.mjs` is gone
+  (as is the `eslint` key Next 16 no longer supports).
+- **Contact page** rebuilt in the same neubrutalist style as the rest of
+  the site, in German + English, without the stale "event catering" line.
+  Address/hours live in one place: `business` in `lib/siteConfig.ts`.
+  The Google Maps iframe was replaced with an "Open in Google Maps" link,
+  so no data goes to Google unless the visitor clicks.
+- **No third-party requests on page load** — Home and Gallery now use the
+  photos in `/public` instead of hotlinked Unsplash images, and the Baloo 2
+  font is self-hosted via `next/font` instead of loaded from Google Fonts
+  (a known GDPR issue in Germany, see LG München I, 3 O 17493/20).
+- **Menu page** is translated (DE/EN), shows a proper error if the menu
+  can't load, and its dot-grid background actually renders now.
+- **Section + language are remembered** across reloads (localStorage),
+  and `<html lang>` follows the chosen language. Disclosed in the
+  Datenschutzerklärung, section 7.
+- **Branded 404 page**; removed a stray duplicate of the Kitchen Portal
+  that was being served at `/api/admin`.
